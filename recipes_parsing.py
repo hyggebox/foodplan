@@ -1,48 +1,73 @@
+import json
 import requests
 
 from bs4 import BeautifulSoup
+from functools import reduce
 from urllib.parse import urljoin
+
+
+DOMAIN = "https://povar.ru/"
+ALL_RECIPES_PAGE = '/master/all/'
+NUM_PAGES = 2
 
 
 def get_recipes_links(category_url):
     response = requests.get(category_url)
     response.raise_for_status()
     category_soup = BeautifulSoup(response.text, 'html.parser')
-
     recipes_links = category_soup.select('a.listRecipieTitle')
     return [link['href'] for link in recipes_links]
 
 
+def parse_recipe_details(soup, recipe_details):
+    title = soup.select_one('h1.detailed').text
+    image_url = soup.select_one('.bigImgBox img')['src']
+    description = soup.select_one('.detailed_full').text.strip()
+    instructions = soup.select('.detailed_step_description_big')
+    recipe_text = ' '.join([instr_part.text for instr_part in instructions])
+
+    categories = soup.select('.detailed_tags a')
+    clean_categories = [category.text for category in categories]
+
+    ingredients = soup.select('.detailed_ingredients>li')
+
+    recipe_details[title] = {
+        'img_url': image_url,
+        'description': description,
+        'text': recipe_text,
+        'categories': clean_categories,
+        'ingredients': [],
+    }
+
+    for ingredient in ingredients:
+        ingredient_line = ingredient.text
+        ingredient_name = ingredient_line.split('—')[0].strip()
+        unsplit_amount = ingredient_line.split('—')[1].strip()
+        if 'По вкусу' in unsplit_amount:
+            amount, unit = None, None
+        else:
+            amount, unit = unsplit_amount.split(None, 1)
+
+        recipe_details[title]['ingredients'].append({
+            'name': ingredient_name,
+            'amount': amount,
+            'unit': unit
+        })
+    return recipe_details
+
+
 if __name__ == '__main__':
-    domain = "https://povar.ru/"
-    category = '/list/goryachie_bliuda/'
+    recipe_details = {}
 
-    recipes_urls = get_recipes_links(urljoin(domain, category))
-    for url in recipes_urls:
-        response = requests.get(urljoin(domain, url))
-        response.raise_for_status()
-        recipe_soup = BeautifulSoup(response.text, 'html.parser')
+    for page in range(1, NUM_PAGES+1):
+        recipes_page = reduce(urljoin, [DOMAIN, ALL_RECIPES_PAGE, str(page)])
+        recipes_urls = get_recipes_links(recipes_page)
 
-        title = recipe_soup.select_one('h1.detailed').text
-        image_url = recipe_soup.select_one('.bigImgBox img')['src']
-        instructions = recipe_soup.select('.detailed_step_description_big')
-        recipe_text = ' '.join([instr_part.text for instr_part in instructions])
+        for url in recipes_urls:
+            response = requests.get(urljoin(DOMAIN, url))
+            response.raise_for_status()
+            recipe_soup = BeautifulSoup(response.text, 'html.parser')
+            parse_recipe_details(recipe_soup, recipe_details)
 
-        ingredients = recipe_soup.select('.detailed_ingredients>li')
-
-        print('TITLE', title)
-        print('IMAGE_URL', image_url)
-        print('TEXT', recipe_text)
-
-        for ingredient in ingredients:
-            ingredient_line = ingredient.text
-            ingredient_name = ingredient_line.split('—')[0].strip()
-            unsplit_amount = ingredient_line.split('—')[1].strip()
-            if 'По вкусу' in unsplit_amount:
-                amount, unit = None, None
-            else:
-                amount, unit = unsplit_amount.split(None, 1)
-
-            print('INGR:', ingredient_name, 'AMOUNT:', amount, 'UNIT:', unit)
-
-        print('')
+    with open('recipes.json', "w", encoding="utf8") as file:
+        json.dump(recipe_details, file, ensure_ascii=False, indent=4)
