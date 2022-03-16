@@ -23,11 +23,10 @@ print("TEXT", recipe_text)
 for ingredient in ingredients:
     ingredient_line = ingredient.text
     ingredient_name = ingredient_line.split("—")[0].strip()
-    ingredient_amount = ingredient_line.split("—")[1].strip()
-    if 'По вкусу' in ingredient_amount:
-        amount = None
-        unit = None
+    unsplit_amount = ingredient_line.split("—")[1].strip()
+    if 'По вкусу' in unsplit_amount:
+        amount, unit = None, None
     else:
-        amount, unit = ingredient_amount.split(None, 1)
+        amount, unit = unsplit_amount.split(None, 1)
 
     print("INGR:", ingredient_name, "AMOUNT:", amount, "UNIT:", unit)
