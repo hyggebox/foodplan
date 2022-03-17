@@ -7,9 +7,9 @@ from random import randint
 from urllib.parse import urljoin
 
 
-DOMAIN = "https://povar.ru/"
+DOMAIN = 'https://povar.ru/'
 ALL_RECIPES_PAGE = '/master/all/'
-NUM_PAGES = 2
+NUM_PAGES = 5
 
 
 def get_recipes_links(category_url):
@@ -111,5 +111,5 @@ if __name__ == '__main__':
             recipe_soup = BeautifulSoup(response.text, 'html.parser')
             parse_recipe_details(recipe_soup, recipe_details)
 
-    with open('recipes.json', "w", encoding="utf8") as file:
+    with open('recipes.json', 'w', encoding='utf8') as file:
         json.dump(recipe_details, file, ensure_ascii=False, indent=4)
