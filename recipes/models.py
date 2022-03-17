@@ -128,6 +128,28 @@ class Subscription(models.Model):
         return f'Пользователь {self.user} подписка на {self.time_intervals.time_intervals}'
 
 
+class Alergy(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Аллергия пользователя',)
+    ingredients = models.ManyToManyField(
+        Ingredients,
+        verbose_name='Продукты, на которые аллергия',
+        null=True)
+    subscription = models.ForeignKey(
+        Subscription,
+        null=True,
+        verbose_name='Подписка')
+
+    class Meta:
+        verbose_name = 'Аллергия'
+        verbose_name_plural = 'Аллергия'
+
+    def __str__(self):
+        return f'Аллергия пользователя {self.user}'
+
+
 
 
 
