@@ -5,13 +5,25 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Tag(models.Model):
+class RestrictTag(models.Model):
     """ теги аллергий"""
-    meal = models.CharField('Тэги для пищи', max_length=20)
+    tag = models.CharField('Тэги для пищи', max_length=20)
 
     class Meta:
-        verbose_name = 'Тэг для пищи'
-        verbose_name_plural = 'Тэги для пищи'
+        verbose_name = 'Тэг ограничений'
+        verbose_name_plural = 'Тэги ограничений'
+
+    def __str__(self):
+        return self.tag
+
+
+class MealTag(models.Model):
+    """ тэги приёмов пищи"""
+    meal = models.CharField('тэги приёмов пищи', max_length=20)
+
+    class Meta:
+        verbose_name = 'тэг приёмов пищи'
+        verbose_name_plural = 'тэги приёмов пищи'
 
     def __str__(self):
         return self.meal
@@ -74,7 +86,8 @@ class Recipe(models.Model):
         Ingredient,
         through='AmountIngredients',
         verbose_name='Игредиенты для рецепта',)
-    meal = models.ManyToManyField(Tag, verbose_name='Приём пищи')
+    meal = models.ManyToManyField(MealTag, verbose_name='Приём пищи')
+    allergic = models.ManyToManyField(RestrictTag, verbose_name='Тэг алергичного продукта')
     calories = models.PositiveIntegerField(default=1)
 
     class Meta:
@@ -118,12 +131,15 @@ class Subscription(models.Model):
         on_delete=models.SET_DEFAULT,
         default=1,
         verbose_name='Время подписки')
-    tag = models.ManyToManyField(Tag, verbose_name='Название приёма пищи')
+    restrict_tag = models.ManyToManyField(
+        RestrictTag,
+        verbose_name='ограничения',
+        blank=True)
     person_quantity = models.PositiveIntegerField('Количество персон', default=1)
-    breakfast = models.BooleanField(default=False)
-    lunch = models.BooleanField(default=False)
-    dinner = models.BooleanField(default=False)
-    holiday_dinner = models.BooleanField(default=False)
+    meal = models.ManyToManyField(
+        MealTag,
+        verbose_name='приём пищи',
+        blank=True)
 
     class Meta:
         verbose_name = 'Подписка'

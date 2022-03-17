@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 from recipes.models import (
-    Meal, Unit, Subscription, Ingredient, Recipe, AmountIngredients,
-    SubscriptionTimeInterval, Specific)
+    MealTag, Unit, RestrictTag, Ingredient, Recipe, AmountIngredients,
+    SubscriptionTimeInterval, Subscription)
 
 
-@admin.register(Meal)
+@admin.register(MealTag)
 class MealAdmin(admin.ModelAdmin):
     ...
 
@@ -28,5 +28,14 @@ class MealAdmin(admin.ModelAdmin):
     ...
 
 @admin.register(AmountIngredients)
+class MealAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(RestrictTag)
+class MealAdmin(admin.ModelAdmin):
+    ...
+
+@admin.register(Subscription)
 class MealAdmin(admin.ModelAdmin):
     ...
