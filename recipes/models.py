@@ -56,4 +56,37 @@ class Ingredients(models.Model):
         return self.product_name
 
 
+class Recipe(models.Model):
+    title = models.CharField('Название рецепта', max_length=50)
+    image = models.ImageField()
+    recipe_text = models.TextField()
+    ingredients = models.ManyToManyField(Ingredients)
+    meal = models.ManyToManyField(Meal)
+
+
+class AmountIngredients(models.Model):
+    """ингридиенты и их количество для рецепта"""
+    ingredient = models.ForeignKey(
+        Ingredients,
+        on_delete=models.CASCADE,
+        verbose_name='ингредиент')
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='рецепт',)
+    counts = models.PositiveSmallIntegerField(
+        'Количество',
+        default=1)
+
+    class Meta:
+        verbose_name = 'Ингридиент для рецепта'
+        verbose_name_plural = 'Ингридиенты для рецепта'
+
+    def __str__(self):
+        return self.ingredient.product_name
+
+
+
+
+
 
