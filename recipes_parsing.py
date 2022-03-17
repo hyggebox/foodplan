@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 
 DOMAIN = 'https://povar.ru/'
 ALL_RECIPES_PAGE = '/master/all/'
-NUM_PAGES = 5
+NUM_PAGES = 2
 
 
 def get_recipes_links(category_url):
@@ -31,6 +31,7 @@ def parse_recipe_details(soup, recipe_details):
     clean_categories = [category.text for category in categories]
 
     portions = soup.select_one('.ingredients_wrapper .detailed_full em').text.split()[2]
+    converted_portions = convert_portions(portions)
 
     ingredients = soup.select('.detailed_ingredients>li')
 
@@ -40,7 +41,7 @@ def parse_recipe_details(soup, recipe_details):
         'text': recipe_text,
         'categories': clean_categories,
         'ingredients': [],
-        'portions': portions,
+        'portions': converted_portions,
         'cal': randint(200, 1050)
     }
 
@@ -53,14 +54,12 @@ def parse_recipe_details(soup, recipe_details):
         else:
             amount, unit = unsplit_amount.split(None, 1)
 
-        if not unit:
-            clean_unit = None
-        else:
-            clean_unit = fix_unit(unit.lower())
+        clean_unit = None if not unit else fix_unit(unit.lower())
+        clean_amount = None if not amount else convert_amount(amount)
 
         recipe_details[title]['ingredients'].append({
             'name': ingredient_name,
-            'amount': amount,
+            'amount': clean_amount,
             'unit': clean_unit
         })
     return recipe_details
@@ -96,6 +95,32 @@ def fix_unit(unit):
             return 'щепотки'
         case unit if 'зубч' in unit:
             return 'зубчики'
+
+
+def convert_amount(parsed_qty):
+    if "-" and "/" in parsed_qty:
+        split_num = parsed_qty.split("-")[0].split("/")
+        converted_gty = round(int(split_num[0]) / int(split_num[1]), 2)
+    elif "-" in parsed_qty:
+        converted_gty = int(parsed_qty.split("-")[0])
+    elif "/" in parsed_qty:
+        split_num = parsed_qty.split("/")
+        converted_gty = round(int(split_num[0]) / int(split_num[1]), 2)
+    elif "," in parsed_qty:
+        converted_gty = float(parsed_qty.replace(",", "."))
+    elif parsed_qty.isdigit():
+        converted_gty = int(parsed_qty)
+    else:
+        converted_gty = None
+    return converted_gty
+
+
+def convert_portions(parsed_portions):
+    if parsed_portions.isdigit():
+        converted_portions = int(parsed_portions)
+    elif "-" in parsed_portions:
+        converted_portions = int(parsed_portions.split("-")[0])
+    return converted_portions
 
 
 if __name__ == '__main__':
