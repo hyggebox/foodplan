@@ -30,8 +30,8 @@ class Ingredients(models.Model):
     unit = models.ForeignKey(
         Units,
         on_delete=models.SET_NULL,
-        verbose_name='Меры продуктов')
-
+        verbose_name='Меры продуктов',
+        null=True,)
     calories = models.PositiveIntegerField()
     with_glutogen = models.BooleanField()
     vegetarian_food = models.BooleanField()
