@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Meal(models.Model):
@@ -101,6 +104,28 @@ class AmountIngredients(models.Model):
 
     def __str__(self):
         return self.ingredient.product_name
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+        verbose_name='Пользователь',)
+    time_intervals = models.ForeignKey(
+        SubscriptionTimeIntervals,
+        on_delete=models.SET_DEFAULT,
+        default=1,
+        verbose_name='Время подписки')
+    meal = models.ManyToManyField(Meal, verbose_name='Название приёма пищи')
+    person_quantity = models.PositiveIntegerField('Количество персон', default=1)
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+
+    def __str__(self):
+        return f'Пользователь {self.user} подписка на {self.time_intervals.time_intervals}'
 
 
 
