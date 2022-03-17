@@ -29,6 +29,8 @@ def parse_recipe_details(soup, recipe_details):
     categories = soup.select('.detailed_tags a')
     clean_categories = [category.text for category in categories]
 
+    portions = soup.select_one('.ingredients_wrapper .detailed_full em').text.split()[2]
+
     ingredients = soup.select('.detailed_ingredients>li')
 
     recipe_details[title] = {
@@ -37,6 +39,7 @@ def parse_recipe_details(soup, recipe_details):
         'text': recipe_text,
         'categories': clean_categories,
         'ingredients': [],
+        'portions': portions
     }
 
     for ingredient in ingredients:
