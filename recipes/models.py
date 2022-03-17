@@ -16,7 +16,7 @@ class Meal(models.Model):
         return self.meal
 
 
-class Units(models.Model):
+class Unit(models.Model):
     name = models.CharField('Мера измерения продукта', max_length=20)
 
     class Meta:
@@ -27,9 +27,9 @@ class Units(models.Model):
         return self.name
 
 
-class SubscriptionTimeIntervals(models.Model):
+class SubscriptionTimeInterval(models.Model):
     time_intervals = models.PositiveIntegerField(
-        'временные интервалы для подписки')
+        'временные интервалы для подписки в месяцах')
 
     class Meta:
         verbose_name = 'временной интервал для подписки'
@@ -39,17 +39,14 @@ class SubscriptionTimeIntervals(models.Model):
         return f'интервал {self.time_intervals}'
 
 
-class Ingredients(models.Model):
+class Ingredient(models.Model):
     """виды продуктов для рецепта"""
     product_name = models.CharField('Название продукта', max_length=20)
     unit = models.ForeignKey(
-        Units,
+        Unit,
         on_delete=models.SET_NULL,
         verbose_name='Меры продуктов',
         null=True,)
-    calories = models.PositiveIntegerField()
-    with_glutogen = models.BooleanField()
-    vegetarian_food = models.BooleanField()
 
     class Meta:
         verbose_name = 'Тип ингредиента'
@@ -66,15 +63,19 @@ class Recipe(models.Model):
         blank=True,
         null=True,
         verbose_name='Изображение к рецепту')
+    description = models.TextField(
+        blank=True,
+        verbose_name='Краткое описание', )
     recipe_text = models.TextField(
         blank=True,
-        verbose_name='Описание',)
+        verbose_name='описание приготовления',)
     ingredients = models.ManyToManyField(
-        Ingredients,
+        Ingredient,
         through='AmountIngredients',
         through_fields='ingredient',
         verbose_name='Игредиенты для рецепта',)
     meal = models.ManyToManyField(Meal, verbose_name='Приём пищи')
+    calories = models.PositiveIntegerField(default=1)
 
     class Meta:
         verbose_name = 'Рецепт'
@@ -87,7 +88,7 @@ class Recipe(models.Model):
 class AmountIngredients(models.Model):
     """ингридиенты и их количество для рецепта"""
     ingredient = models.ForeignKey(
-        Ingredients,
+        Ingredient,
         on_delete=models.CASCADE,
         verbose_name='ингредиент')
     recipe = models.ForeignKey(
@@ -113,7 +114,7 @@ class Subscription(models.Model):
         related_name='subscriptions',
         verbose_name='Пользователь',)
     time_intervals = models.ForeignKey(
-        SubscriptionTimeIntervals,
+        SubscriptionTimeInterval,
         on_delete=models.SET_DEFAULT,
         default=1,
         verbose_name='Время подписки')
@@ -128,19 +129,21 @@ class Subscription(models.Model):
         return f'Пользователь {self.user} подписка на {self.time_intervals.time_intervals}'
 
 
-class Alergy(models.Model):
+class Specific(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Аллергия пользователя',)
     ingredients = models.ManyToManyField(
-        Ingredients,
+        Ingredient,
         verbose_name='Продукты, на которые аллергия',
         null=True)
     subscription = models.ForeignKey(
         Subscription,
         null=True,
         verbose_name='Подписка')
+    with_glutogen = models.BooleanField(default=None)
+    vegetarian_food = models.BooleanField(default=None)
 
     class Meta:
         verbose_name = 'Аллергия'
