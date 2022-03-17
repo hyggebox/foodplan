@@ -58,10 +58,27 @@ class Ingredients(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField('Название рецепта', max_length=50)
-    image = models.ImageField()
-    recipe_text = models.TextField()
-    ingredients = models.ManyToManyField(Ingredients)
-    meal = models.ManyToManyField(Meal)
+    image = models.ImageField(
+        upload_to='recipes/',
+        blank=True,
+        null=True,
+        verbose_name='Изображение к рецепту')
+    recipe_text = models.TextField(
+        blank=True,
+        verbose_name='Описание',)
+    ingredients = models.ManyToManyField(
+        Ingredients,
+        through='AmountIngredients',
+        through_fields='ingredient',
+        verbose_name='Игредиенты для рецепта',)
+    meal = models.ManyToManyField(Meal, verbose_name='Приём пищи')
+
+    class Meta:
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
+
+    def __str__(self):
+        return self.title
 
 
 class AmountIngredients(models.Model):
