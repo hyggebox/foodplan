@@ -6,11 +6,11 @@ User = get_user_model()
 
 class Meal(models.Model):
     """ завтрак, обед, ужин, десерт"""
-    meal = models.CharField('Приём пищи', max_length=20)
+    meal = models.CharField('Тэги для пищи', max_length=20)
 
     class Meta:
-        verbose_name = 'Приём пищи'
-        verbose_name_plural = 'Приём пищи'
+        verbose_name = 'Тэг для пищи'
+        verbose_name_plural = 'Тэги для пищи'
 
     def __str__(self):
         return self.meal
@@ -36,7 +36,7 @@ class SubscriptionTimeInterval(models.Model):
         verbose_name_plural = 'временные интервалы для подписки'
 
     def __str__(self):
-        return f'интервал {self.time_intervals}'
+        return f'Интервал {self.time_intervals} месяцев'
 
 
 class Ingredient(models.Model):
@@ -135,8 +135,7 @@ class Specific(models.Model):
         verbose_name='Аллергия пользователя',)
     ingredients = models.ManyToManyField(
         Ingredient,
-        verbose_name='Продукты, на которые аллергия',
-        null=True)
+        verbose_name='Продукты, на которые аллергия',)
     subscription = models.ForeignKey(
         Subscription,
         null=True,
