@@ -72,7 +72,6 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='AmountIngredients',
-        through_fields='ingredient',
         verbose_name='Игредиенты для рецепта',)
     meal = models.ManyToManyField(Meal, verbose_name='Приём пищи')
     calories = models.PositiveIntegerField(default=1)
@@ -141,6 +140,7 @@ class Specific(models.Model):
     subscription = models.ForeignKey(
         Subscription,
         null=True,
+        on_delete=models.SET_NULL,
         verbose_name='Подписка')
     with_glutogen = models.BooleanField(default=None)
     vegetarian_food = models.BooleanField(default=None)
