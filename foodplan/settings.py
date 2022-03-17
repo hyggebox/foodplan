@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'recipes'
+    'recipes.apps.RecipesConfig'
 ]
 
 MIDDLEWARE = [
@@ -53,7 +53,11 @@ ROOT_URLCONF = 'foodplan.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR/'templates',
+            BASE_DIR/'foodplan/templates',
+            BASE_DIR/'recipes/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -111,7 +115,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = env.str('STATIC_URL', '/static/')
+
+STATIC_ROOT = env.str('STATIC_ROOT', str(BASE_DIR/'static'))
+
+STATICFILES_DIRS = env.list (
+    'STATICFILES_DIRS',
+    default=[
+        str(BASE_DIR/'foodplan/static'),
+        str(BASE_DIR/'recipes/static'),
+    ]
+)
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR/'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
