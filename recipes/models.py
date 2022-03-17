@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Meal(models.Model):
-    """ завтрак, обед, ужин, десерт"""
+class Tag(models.Model):
+    """ теги аллергий"""
     meal = models.CharField('Тэги для пищи', max_length=20)
 
     class Meta:
@@ -73,7 +73,7 @@ class Recipe(models.Model):
         Ingredient,
         through='AmountIngredients',
         verbose_name='Игредиенты для рецепта',)
-    meal = models.ManyToManyField(Meal, verbose_name='Приём пищи')
+    meal = models.ManyToManyField(Tag, verbose_name='Приём пищи')
     calories = models.PositiveIntegerField(default=1)
 
     class Meta:
@@ -117,8 +117,12 @@ class Subscription(models.Model):
         on_delete=models.SET_DEFAULT,
         default=1,
         verbose_name='Время подписки')
-    meal = models.ManyToManyField(Meal, verbose_name='Название приёма пищи')
+    tag = models.ManyToManyField(Tag, verbose_name='Название приёма пищи')
     person_quantity = models.PositiveIntegerField('Количество персон', default=1)
+    breakfast = models.BooleanField(default=False)
+    lunch = models.BooleanField(default=False)
+    dinner = models.BooleanField(default=False)
+    holiday_dinner = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Подписка'
@@ -127,29 +131,6 @@ class Subscription(models.Model):
     def __str__(self):
         return f'Пользователь {self.user} подписка на {self.time_intervals.time_intervals}'
 
-
-class Specific(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='Аллергия пользователя',)
-    ingredients = models.ManyToManyField(
-        Ingredient,
-        verbose_name='Продукты, на которые аллергия',)
-    subscription = models.ForeignKey(
-        Subscription,
-        null=True,
-        on_delete=models.SET_NULL,
-        verbose_name='Подписка')
-    with_glutogen = models.BooleanField(default=None)
-    vegetarian_food = models.BooleanField(default=None)
-
-    class Meta:
-        verbose_name = 'Аллергия'
-        verbose_name_plural = 'Аллергия'
-
-    def __str__(self):
-        return f'Аллергия пользователя {self.user}'
 
 
 
