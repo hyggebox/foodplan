@@ -3,6 +3,7 @@ import requests
 
 from bs4 import BeautifulSoup
 from functools import reduce
+from random import randint
 from urllib.parse import urljoin
 
 
@@ -39,7 +40,8 @@ def parse_recipe_details(soup, recipe_details):
         'text': recipe_text,
         'categories': clean_categories,
         'ingredients': [],
-        'portions': portions
+        'portions': portions,
+        'cal': randint(200, 1050)
     }
 
     for ingredient in ingredients:
@@ -51,12 +53,49 @@ def parse_recipe_details(soup, recipe_details):
         else:
             amount, unit = unsplit_amount.split(None, 1)
 
+        if not unit:
+            clean_unit = None
+        else:
+            clean_unit = fix_unit(unit.lower())
+
         recipe_details[title]['ingredients'].append({
             'name': ingredient_name,
             'amount': amount,
-            'unit': unit
+            'unit': clean_unit
         })
     return recipe_details
+
+
+def fix_unit(unit):
+    match unit:
+        case unit if 'килограмм' in unit:
+            return 'кг'
+        case unit if 'грамм' in unit:
+            return 'г'
+        case unit if 'стакан' in unit:
+            return 'стаканы'
+        case unit if 'миллилитр' in unit:
+            return 'мл'
+        case unit if 'литр' in unit:
+            return 'л'
+        case unit if 'штук' in unit:
+            return 'шт'
+        case unit if 'ст. лож' in unit:
+            return 'ст.л.'
+        case unit if 'чайн' in unit:
+            return 'ч.л.'
+        case unit if 'штук' in unit:
+            return 'шт'
+        case unit if 'пучк' in unit:
+            return 'пучки'
+        case unit if 'ломтик' in unit:
+            return 'ломтики'
+        case unit if 'банк' or 'банок' in unit:
+            return 'банки'
+        case unit if 'щепот' in unit:
+            return 'щепотки'
+        case unit if 'зубч' in unit:
+            return 'зубчики'
 
 
 if __name__ == '__main__':
