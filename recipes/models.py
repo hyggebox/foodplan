@@ -24,6 +24,18 @@ class Units(models.Model):
         return self.name
 
 
+class SubscriptionTimeIntervals(models.Model):
+    time_intervals = models.PositiveIntegerField(
+        'временные интервалы для подписки')
+
+    class Meta:
+        verbose_name = 'временной интервал для подписки'
+        verbose_name_plural = 'временные интервалы для подписки'
+
+    def __str__(self):
+        return f'интервал {self.time_intervals}'
+
+
 class Ingredients(models.Model):
     """виды продуктов для рецепта"""
     product_name = models.CharField('Название продукта', max_length=20)
@@ -42,3 +54,6 @@ class Ingredients(models.Model):
 
     def __str__(self):
         return self.product_name
+
+
+
