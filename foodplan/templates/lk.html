@@ -21,16 +21,7 @@
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
-            <div class="container">
-                <a class="navbar-brand" href="/">
-                    <img src="{% static 'foodplan/media/logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
-                </a>
-                <a href="/">
-                    <button class="btn btn-outline-success foodplan_green foodplan__border_green">Выйти</button>
-                </a>
-            </div>
-        </nav>
+        {% include 'includes/nav.html' %}
     </header>
 
     <main style="margin-top: calc(2rem + 85px);">
