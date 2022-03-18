@@ -76,23 +76,31 @@
                     <h2 class="text-center"><strong>Авторизация</strong></h2>
                 </div>
                 <div class="card px-5 py-3 d-flex align-items-center foodplan__shadow">
-                    <form>
+
+                    <!--<form method="post" action="{% url 'signup' %}">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                      <input type="submit" value="Зарегистрироваться">
+                   </form>-->
+
+                    <form method="post" action="{% url 'signup' %}">
+                        {% csrf_token %}
                         <h1 class="mb-4 text-center"><strong>Регистрация</strong></h1>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Имя</label>
-                            <input type="text" class="form-control" id="name">
+                            <label for="id_username" class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control" id="name">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                            <label for="id_email" class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Пароль</label>
-                            <input type="password" class="form-control" id="password">
+                            <label for="id_password1" class="form-label">Пароль</label>
+                            <input type="password" name="password1" class="form-control" id="password1">
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Подтверждение пароля</label>
-                            <input type="password" class="form-control" id="PasswordConfirm">
+                            <label for="id_password2" class="form-label">Подтверждение пароля</label>
+                            <input type="password" name="password2" class="form-control" id="password2">
                         </div>
                         <div class="row mb-3">
                             <div class="col-12 col-sm-6 mt-3">

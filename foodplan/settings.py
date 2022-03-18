@@ -35,7 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'recipes.apps.RecipesConfig'
+    #'recipes.apps.RecipesConfig'
+    'users',
+    'recipes',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +137,8 @@ MEDIA_ROOT = BASE_DIR/'media'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Login
+LOGIN_REDIRECT_URL = 'render_lk_page'
+LOGOUT_REDIRECT_URL = 'render_start_page'
 
-LOGIN_REDIRECT_URL = 'lk'
 django_heroku.settings(locals())
