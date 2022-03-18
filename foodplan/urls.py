@@ -15,7 +15,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', render_start_page, name='render_start_page'),
     path('reg', render_reg_page, name='render_reg_page'),
-    path('auth', render_auth_page, name='render_auth_page'),
+    path('auth/', include('django.contrib.auth.urls')),
     path('lk', render_lk_page, name='render_lk_page'),
     path('order', render_order_page, name='render_order_page'),
     path('', include('recipes.urls')),
