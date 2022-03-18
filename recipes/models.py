@@ -49,7 +49,7 @@ class SubscriptionTimeInterval(models.Model):
         verbose_name_plural = 'Периоды подписки'
 
     def __str__(self):
-        return f'{self.time_intervals} месяцев'
+        return f'{self.time_intervals} мес.'
 
 
 class Ingredient(models.Model):
@@ -162,14 +162,13 @@ class Subscription(models.Model):
         return f'Пользователь {self.user} подписка на {self.period}'
 
     def get_meals(self):
-        return " , ".join([str(meal) for meal in self.meals.all()])
+        return ' , '.join([str(meal) for meal in self.meals.all()])
 
     def get_restrict_tags(self):
-        return " , ".join([str(meal) for meal in self.restrict_tags.all()])
+        return ' , '.join([str(meal) for meal in self.restrict_tags.all()])
 
+    def get_user_name(self):
+        return f'{self.user.first_name} {self.user.last_name}'
 
-
-
-
-
-
+    def get_user_email(self):
+        return self.user.email
