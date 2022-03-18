@@ -120,9 +120,7 @@ class AmountIngredients(models.Model):
         on_delete=models.CASCADE,
         verbose_name='рецепт',
         related_name='ingredient_amount')
-    amount = models.PositiveSmallIntegerField(
-        'Количество',
-        default=1)
+    amount = models.FloatField('Количество', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
