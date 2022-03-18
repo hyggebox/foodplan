@@ -6,35 +6,35 @@ User = get_user_model()
 
 
 class RestrictTag(models.Model):
-    """ теги аллергий"""
-    tag = models.CharField('Тэги для пищи', max_length=20)
+    """ограничения по меню"""
+    tag = models.CharField('Ограничение по меню', max_length=100)
 
     class Meta:
-        verbose_name = 'Тэг ограничений'
-        verbose_name_plural = 'Тэги ограничений'
+        verbose_name = 'Ограничение по меню'
+        verbose_name_plural = 'Ограничения по меню'
 
     def __str__(self):
         return self.tag
 
 
 class MealTag(models.Model):
-    """ тэги приёмов пищи"""
-    meal = models.CharField('тэги приёмов пищи', max_length=20)
+    """категория блюда, приём пиши"""
+    meal = models.CharField('Приём пищи', max_length=100)
 
     class Meta:
-        verbose_name = 'тэг приёмов пищи'
-        verbose_name_plural = 'тэги приёмов пищи'
+        verbose_name = 'Категория блюда'
+        verbose_name_plural = 'Категории блюд'
 
     def __str__(self):
         return self.meal
 
 
 class Unit(models.Model):
-    name = models.CharField('Мера измерения продукта', max_length=20)
+    name = models.CharField('Мера измерения', max_length=100)
 
     class Meta:
-        verbose_name = 'Мера продукта'
-        verbose_name_plural = 'Меры продуктов'
+        verbose_name = 'Мера измерения'
+        verbose_name_plural = 'Меры измерения'
 
     def __str__(self):
         return self.name
@@ -42,37 +42,37 @@ class Unit(models.Model):
 
 class SubscriptionTimeInterval(models.Model):
     time_intervals = models.PositiveIntegerField(
-        'временные интервалы для подписки в месяцах')
+        'Период посписки в месяцах')
 
     class Meta:
-        verbose_name = 'временной интервал для подписки'
-        verbose_name_plural = 'временные интервалы для подписки'
+        verbose_name = 'Период подписки'
+        verbose_name_plural = 'Периоды подписки'
 
     def __str__(self):
-        return f'Интервал {self.time_intervals} месяцев'
+        return f'{self.time_intervals} месяцев'
 
 
 class Ingredient(models.Model):
     """виды продуктов для рецепта"""
-    product_name = models.CharField('Название продукта', max_length=20)
+    product_name = models.CharField('Название продукта', max_length=200)
     unit = models.ForeignKey(
         Unit,
         on_delete=models.SET_NULL,
-        verbose_name='Меры продуктов',
+        verbose_name='Мера измерения',
         null=True,)
 
     class Meta:
-        verbose_name = 'Тип ингредиента'
-        verbose_name_plural = 'Тип ингредиентов'
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
         return self.product_name
 
 
 class Recipe(models.Model):
-    title = models.CharField('Название рецепта', max_length=50)
+    title = models.CharField('Название рецепта', max_length=200)
     image = models.ImageField(
-        upload_to='recipes/',
+        upload_to='recipes',
         blank=True,
         null=True,
         verbose_name='Изображение к рецепту')
@@ -81,13 +81,13 @@ class Recipe(models.Model):
         verbose_name='Краткое описание', )
     recipe_text = models.TextField(
         blank=True,
-        verbose_name='описание приготовления',)
+        verbose_name='Описание приготовления',)
     ingredients = models.ManyToManyField(
         Ingredient,
         through='AmountIngredients',
-        verbose_name='Игредиенты для рецепта',)
-    meal = models.ManyToManyField(MealTag, verbose_name='Приём пищи')
-    allergic = models.ManyToManyField(RestrictTag, verbose_name='Тэг алергичного продукта')
+        verbose_name='Ингредиенты в рецепте',)
+    meals = models.ManyToManyField(MealTag, verbose_name='Категории блюд')
+    restrict_tags = models.ManyToManyField(RestrictTag, verbose_name='Ограничения в меню')
     calories = models.PositiveIntegerField(default=1)
 
     class Meta:
@@ -97,9 +97,18 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
+    def get_meals(self):
+        return " , ".join([str(meal) for meal in self.meals.all()])
+
+    def get_restrict_tags(self):
+        return " , ".join([str(meal) for meal in self.restrict_tags.all()])
+
+    def get_ingredients(self):
+        return " , ".join([str(meal) for meal in self.ingredients.all()])
+
 
 class AmountIngredients(models.Model):
-    """ингридиенты и их количество для рецепта"""
+    """ингредиенты и их количество для рецепта"""
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
@@ -113,8 +122,8 @@ class AmountIngredients(models.Model):
         default=1)
 
     class Meta:
-        verbose_name = 'Ингридиент для рецепта'
-        verbose_name_plural = 'Ингридиенты для рецепта'
+        verbose_name = 'Ингредиент в рецепте'
+        verbose_name_plural = 'Ингредиенты в рецепте'
 
     def __str__(self):
         return self.ingredient.product_name
@@ -126,19 +135,22 @@ class Subscription(models.Model):
         on_delete=models.CASCADE,
         related_name='subscriptions',
         verbose_name='Пользователь',)
-    time_intervals = models.ForeignKey(
+    period = models.ForeignKey(
         SubscriptionTimeInterval,
         on_delete=models.SET_DEFAULT,
         default=1,
-        verbose_name='Время подписки')
-    restrict_tag = models.ManyToManyField(
+        verbose_name='Длительность подписки')
+    restrict_tags = models.ManyToManyField(
         RestrictTag,
-        verbose_name='ограничения',
+        verbose_name='Ограничения',
         blank=True)
-    person_quantity = models.PositiveIntegerField('Количество персон', default=1)
-    meal = models.ManyToManyField(
+    persons_num = models.PositiveIntegerField(
+        'Количество персон',
+        default=1
+    )
+    meals = models.ManyToManyField(
         MealTag,
-        verbose_name='приём пищи',
+        verbose_name='Категории блюд',
         blank=True)
 
     class Meta:
@@ -146,7 +158,13 @@ class Subscription(models.Model):
         verbose_name_plural = 'Подписки'
 
     def __str__(self):
-        return f'Пользователь {self.user} подписка на {self.time_intervals.time_intervals}'
+        return f'Пользователь {self.user} подписка на {self.period}'
+
+    def get_meals(self):
+        return " , ".join([str(meal) for meal in self.meals.all()])
+
+    def get_restrict_tags(self):
+        return " , ".join([str(meal) for meal in self.restrict_tags.all()])
 
 
 
