@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -17,4 +18,5 @@ urlpatterns = [
     path('auth', render_auth_page, name='render_auth_page'),
     path('lk', render_lk_page, name='render_lk_page'),
     path('order', render_order_page, name='render_order_page'),
+    path('', include('recipes.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

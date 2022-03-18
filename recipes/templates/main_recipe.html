@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="{% static 'foodplan/style.css' %}"/>
+
+    <title>Foodplan 2021 - Меню на неделю FOODPLAN</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="{% static 'foodplan/media/logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
+                </a>
+            </div>
+        </nav>
+    </header>
+    <main style="margin-top: calc(2rem + 85px);">
+        <section>
+            <div class="container">
+                <h1><strong class="foodplan_green">Ваш рецепт:</strong> {{ title }}</h1>
+                <h5 class="text-secondary mb-3">{{ description }}</h5>
+                <div class="row mb-5">
+                    <div class="col-6 col-md-3">
+                        <img src="{{ image }}" alt="" class="w-100">
+                    </div>
+                </div>
+                <h2><strong>Ингридиенты:</strong></h2>
+                <div>
+                    <table class="table table-responsive">
+                        {% for ingred, amount in ingredients.items %}
+                        <tr>
+                            <th>{{ ingred }}</th>
+                            <th>{{ amount }}</th>
+                            <th>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                        
+                        <!-- <tr>
+                            <th>сосиски</th>
+                            <th>2 шт.</th>
+                            <th>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </th>
+                        </tr> -->
+                        <!-- <tr>
+                            <th>масло</th>
+                            <th>2 ст л</th>
+                            <th>
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </th>
+                        </tr> -->
+
+                        
+                    </table>
+                </div>
+                <div>
+                    <p>{{ recipe_text }}</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer pt-2" style="border-top: 1px solid lightgray;">
+        <div class="container d-flex flex-row justify-content-center mb-2">
+            <small class="text-center">
+                <h6>© Девман2022. Все права защищены. © Devman2022. All right reserved.</h6><a href="#"
+                    class="link-secondary">Политика конфиденциальности</a>
+            </small>
+        </div>
+    </footer>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous">
+    </script>
+</body>
