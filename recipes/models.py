@@ -80,14 +80,15 @@ class Recipe(models.Model):
         blank=True,
         verbose_name='Краткое описание', )
     recipe_text = models.TextField(
-        blank=True,
         verbose_name='Описание приготовления',)
     ingredients = models.ManyToManyField(
         Ingredient,
         through='AmountIngredients',
         verbose_name='Ингредиенты в рецепте',)
     meals = models.ManyToManyField(MealTag, verbose_name='Категории блюд')
-    restrict_tags = models.ManyToManyField(RestrictTag, verbose_name='Ограничения в меню')
+    restrict_tags = models.ManyToManyField(RestrictTag,
+                                           verbose_name='Ограничения в меню',
+                                           blank=True)
     calories = models.PositiveIntegerField(default=1)
 
     class Meta:
