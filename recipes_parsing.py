@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 
 DOMAIN = 'https://povar.ru/'
 ALL_RECIPES_PAGE = '/master/all/'
-NUM_PAGES = 2
+NUM_PAGES = 10
 
 
 def get_recipes_links(category_url):
@@ -102,7 +102,11 @@ def convert_amount(parsed_qty):
         split_num = parsed_qty.split("-")[0].split("/")
         converted_gty = round(int(split_num[0]) / int(split_num[1]), 2)
     elif "-" in parsed_qty:
-        converted_gty = int(parsed_qty.split("-")[0])
+        split_gty = parsed_qty.split("-")[0]
+        converted_gty = int(split_gty) if not ',' in split_gty else \
+            float(split_gty.replace(",", "."))
+    elif "=" in parsed_qty:
+        converted_gty = int(parsed_qty.split("=")[0])
     elif "/" in parsed_qty:
         split_num = parsed_qty.split("/")
         converted_gty = round(int(split_num[0]) / int(split_num[1]), 2)
@@ -117,10 +121,9 @@ def convert_amount(parsed_qty):
 
 def convert_portions(parsed_portions):
     if parsed_portions.isdigit():
-        converted_portions = int(parsed_portions)
+        return int(parsed_portions)
     elif "-" in parsed_portions:
-        converted_portions = int(parsed_portions.split("-")[0])
-    return converted_portions
+        return int(parsed_portions.split("-")[0])
 
 
 if __name__ == '__main__':
