@@ -73,7 +73,7 @@
                         <form method="post">
                           {% csrf_token %}
                           {{ form.as_p }}
-                          <h6>Нет аккаунта? <a href="{% url 'render_reg_page' %}" class="link-dark foodplan_green">Зарегистрируйтесь</a></h6>
+                          <h6>Нет аккаунта? <a href="{% url 'signup' %}" class="link-dark foodplan_green">Зарегистрируйтесь</a></h6>
                             <br>
                           <button type="submit">Войти</button>
                         </form>
