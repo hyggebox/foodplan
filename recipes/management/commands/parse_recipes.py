@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from functools import reduce
 from random import randint
 from urllib.parse import urljoin
+from django.core.management.base import BaseCommand
 
 
 DOMAIN = 'https://povar.ru/'
@@ -126,7 +127,7 @@ def convert_portions(parsed_portions):
         return int(parsed_portions.split("-")[0])
 
 
-if __name__ == '__main__':
+def main():
     recipe_details = {}
 
     for page in range(1, NUM_PAGES+1):
@@ -141,3 +142,9 @@ if __name__ == '__main__':
 
     with open('recipes.json', 'w', encoding='utf8') as file:
         json.dump(recipe_details, file, ensure_ascii=False, indent=4)
+
+
+class Command(BaseCommand):
+
+    def handle(self, *args, **options):
+        main()
