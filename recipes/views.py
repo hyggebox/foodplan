@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Recipe
 
@@ -16,7 +17,7 @@ def get_recipe_data(recipe):
         }
     }
 
-
+@login_required(login_url='/')
 def render_recipe_page(request):
     recipes = Recipe.objects.all()
 
