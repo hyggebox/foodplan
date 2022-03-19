@@ -18,10 +18,11 @@ def get_recipe_data(recipe):
     }
 
 @login_required(login_url='/')
-def render_recipe_page(request):
+def render_recipe_page(request, id):
     recipes = Recipe.objects.all()
-
-    the_first_recipe = recipes[0]
+    print('=============')
+    print(id)
+    # the_first_recipe = recipes[0]
     # data_recipe = get_recipe_data(the_first_recipe)
 
     # context = get_recipe_data(the_first_recipe)

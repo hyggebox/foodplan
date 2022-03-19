@@ -25,7 +25,26 @@ def render_auth_page(request):
 
 @login_required(login_url='/')
 def render_lk_page(request):
-    return render(request, 'lk.html')
+    current_user = User.objects.get(id=request.user.id)
+    user_subscriptions = current_user.subscriptions.all()
+    print(user_subscriptions)
+    
+    user_subsciptions_data = []
+    for user_subsciption in user_subscriptions:
+        user_subsciption_data = {
+            'id': user_subsciption.id,
+            'title': user_subsciption.__str__(),
+            'meals_amount': user_subsciption.meals.count(),
+            'persons_amount': user_subsciption.persons_num,
+            'features': [tag.tag for tag in user_subsciption.restrict_tags.all()]
+        }
+        user_subsciptions_data.append(user_subsciption_data)
+        
+    context = {
+        "subscriptions": user_subsciptions_data
+    }
+
+    return render(request, 'lk.html', context=context)
 
 
 @login_required(login_url='/')
@@ -68,7 +87,7 @@ def render_order_page(request):
                 )
                 user_subscription.restrict_tags.add(feature)
 
-        return redirect('/recipe')
+        return redirect('/lk')
 
     else:
         subsform = SubsForm()
