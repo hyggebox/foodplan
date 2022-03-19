@@ -53,8 +53,20 @@
                         {% for ingredient in ingredients %}
                         <tr>
                             <th>{{ ingredient.ingredient.product_name }}</th>
-                            <th>{{ ingredient.amount|mul:persons_num }}</th>
-                            <th>{{ ingredient.ingredient.unit }}</th>
+                            {% if ingredient.amount %}
+                              {% if ingredient.amount|mul:persons_num > 2 %}
+                                <th>{{ ingredient.amount|mul:persons_num|floatformat:'0' }}</th>
+                              {% else %}
+                                <th>{{ ingredient.amount|mul:persons_num|floatformat:1 }}</th>
+                              {% endif %}
+                            {% else %}
+                              <th>по вкусу</th>
+                            {% endif %}
+                            {% if ingredient.ingredient.unit %}
+                              <th>{{ ingredient.ingredient.unit }}</th>
+                            {% else %}
+                              <th> </th>
+                            {% endif %}
                             <th>
                                 <input type="checkbox">
                                 <span class="checkmark"></span>
