@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 
 DOMAIN = 'https://povar.ru/'
 ALL_RECIPES_PAGE = '/master/all/'
-NUM_PAGES = 10
+NUM_PAGES = 12
 
 
 def get_recipes_links(category_url):
@@ -50,10 +50,13 @@ def parse_recipe_details(soup, recipe_details):
         ingredient_line = ingredient.text
         ingredient_name = ingredient_line.split('—')[0].strip()
         unsplit_amount = ingredient_line.split('—')[1].strip()
-        if 'По вкусу' in unsplit_amount:
+        try:
+            if 'По вкусу' in unsplit_amount:
+                amount, unit = None, None
+            else:
+                amount, unit = unsplit_amount.split(None, 1)
+        except ValueError:
             amount, unit = None, None
-        else:
-            amount, unit = unsplit_amount.split(None, 1)
 
         clean_unit = None if not unit else fix_unit(unit.lower())
         clean_amount = None if not amount else convert_amount(amount)
