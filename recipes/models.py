@@ -69,6 +69,15 @@ class Ingredient(models.Model):
         return self.product_name
 
 
+class RecipeQuerySet(models.QuerySet):
+
+    def meals(self, meals):
+        return self.filter(meals__in=meals).order_by('?')
+
+    def restrictions(self, restrictions):
+        return self.filter(restrict_tags__in=restrictions)
+
+
 class Recipe(models.Model):
     title = models.CharField('Название рецепта', max_length=200)
     image = models.ImageField(
@@ -90,6 +99,8 @@ class Recipe(models.Model):
                                            verbose_name='Ограничения в меню',
                                            blank=True)
     calories = models.PositiveIntegerField(default=1)
+
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Рецепт'
