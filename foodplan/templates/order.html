@@ -19,12 +19,12 @@
     <header>
         <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <img src="{% static 'foodplan/media/logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
                 </a>
-                <h3 class="text-secondary mt-2 me-2">Стоимость: 00000₽</h3>
+                {% comment %} <h3 class="text-secondary mt-2 me-2">Стоимость: 00000₽</h3> {% endcomment %}
 
-                <button type="submit" id="btnContinue" class="btn btn-sm btn-outline-success foodplan_green foodplan__border_green">Оплатить</button>
+                {% comment %} <button type="submit" id="btnContinue" class="btn btn-sm btn-outline-success foodplan_green foodplan__border_green">Оплатить</button> {% endcomment %}
 
             </div>
         </nav>
@@ -54,108 +54,118 @@
                     </div>
                 </div>
                 <h2><strong>Выберите подходящий тариф</strong></h2>
-                
-                <form method="POST">
-                    {{ form }}
+            
+                <form  method="POST">
                     {% csrf_token %}
-                    <input type="submit" value="Send" >
-                </form>
-
-                <form>
-                    
                     <table class="table text-center text-truncate mb-5">
                         <tbody>
                             <tr>
-                                <th scope="row" class="text-start">Срок</th>
+                                <th class="text-start" scope="row" >Срок подписки</th>
                                 <td>
-                                    <select class="form-select">
-                                        <option value="0" selected>3 мес.</option>
-                                        <option value="2">12 мес.</option>
+                                    <select name='subs_period' class="form-select">
+                                        <option value="3" selected>3 месяца</option>
+                                        <option value="12">12 месяцев</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row" class="text-start">Завтраки</th>
                                 <td>
-                                    <select name="select1" class="form-select">
-                                        <option value="0" selected>&#10004;</option>
-                                        <option value="1">&#10008;</option>
+                                    <select name="meals" class="form-select">
+                                        <option value="завтрак" selected>&#10004;</option>
+                                        <option value="">&#10008;</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row" class="text-start">Обеды</th>
                                 <td>
-                                    <select name="select2" class="form-select">
-                                        <option value="0" selected>&#10004;</option>
-                                        <option value="1">&#10008;</option>
+                                    <select name="meals" class="form-select">
+                                        <option value="обед" selected>&#10004;</option>
+                                        <option value="">&#10008;</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row" class="text-start">Ужины</th>
                                 <td>
-                                    <select name="select3" class="form-select">
-                                        <option value="0" selected>&#10004;</option>
-                                        <option value="1">&#10008;</option>
+                                    <select name="meals" class="form-select">
+                                        <option value="ужин" selected>&#10004;</option>
+                                        <option value="">&#10008;</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row" class="text-start">Десерты</th>
                                 <td>
-                                    <select name="select4" class="form-select">
-                                        <option value="0" selected>&#10004;</option>
-                                        <option value="1">&#10008;</option>
+                                    <select name="meals" class="form-select">
+                                        <option value="десерт" selected>&#10004;</option>
+                                        <option value="">&#10008;</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
-                                <th scope="row" class="text-start">Новогоднее меню 🎁</th>
+                                <th scope="row" class="text-start">Праздничное меню</th>
                                 <td>
-                                    <select name="select5" class="form-select">
-                                        <option value="0" selected>&#10004;</option>
-                                        <option value="1">&#10008;</option>
+                                    <select name="meals" class="form-select">
+                                        <option value="праздничное меню" selected>&#10004;</option>
+                                        <option value="">&#10008;</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th scope="row" class="text-start">Кол-во персон</th>
                                 <td>
-                                    <select name="select6" class="form-select">
-                                        <option value="0" selected>1</option>
-                                        <option value="1">2</option>
-                                        <option value="2">3</option>
+                                    <select name="person_amount" class="form-select">
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
                                     </select>
                                 </td>
                             </tr>
+
                             <tr>
-                                <th scope="row" class="text-start">Аллергии</th>
+                                <th scope="row" class="text-start">Особенности</th>
                                 <td>
                                     <div class="form-check d-flex justify-content-start">
-                                        <input class="form-check-input me-1" type="checkbox" value="" name="allergy1">
+                                        <input class="form-check-input me-1" type="checkbox" value="без глютэна" name="features">
                                         <label class="form-check-label" for="allergy1">
-                                            Аллергия 1
+                                            без глютэна
                                         </label>
                                     </div>
                                     <div class="form-check d-flex justify-content-start">
-                                        <input class="form-check-input me-1" type="checkbox" value="" name="allergy2">
+                                        <input class="form-check-input me-1" type="checkbox" value="без сахара" name="features">
                                         <label class="form-check-label" for="allergy2">
-                                            Аллергия 2
+                                            без сахара
                                         </label>
                                     </div>
                                     <div class="form-check d-flex justify-content-start">
-                                        <input class="form-check-input me-1" type="checkbox" value="" name="allergy3">
+                                        <input class="form-check-input me-1" type="checkbox" value="вегетарианское" name="features">
                                         <label class="form-check-label" for="allergy3">
-                                            Аллергия 3
+                                            вегетарианское
                                         </label>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <!-- <button type="submit" id="TableSubmit" class="d-none"></button> -->
-                    <input type="submit" value="Send" class="d-none">
+
+                    <div class="d-flex justify-content-center my-5">
+                        <button
+                            id="btnContinue"
+                            type="submit"
+                            value="Send"
+                            class="btn btn-outline-success foodplan_green foodplan__border_green w-50"
+                        >
+                        Добавить подписку
+                        </button>
+                    </div>
                 </form>
 
                 <!-- <form class="card d-flex flex-row align-items-baseline mb-5 p-3 foodplan__bg_grey">
@@ -163,7 +173,7 @@
                     <input type="password" class="form-control me-2" id="password">
                     <button type="submit" class="btn btn-outline-success foodplan_green foodplan__border_green">Применить</button>
                 </form> -->
-                <div class="d-flex justify-content-center my-5">
+                {% comment %} <div class="d-flex justify-content-center my-5">
                     <button type="submit" id="btnContinue"
                         class="btn btn-outline-success foodplan_green foodplan__border_green w-50">Добавить подписку</button>
                     <script>
@@ -171,7 +181,7 @@
                             document.getElementById('TableSubmit').click()
                         })
                     </script>
-                </div>
+                </div> {% endcomment %}
             </div>
         </section>
     </main>
