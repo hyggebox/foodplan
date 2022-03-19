@@ -39,38 +39,29 @@
                         <img src="{{ image }}" alt="" class="w-100">
                     </div>
                 </div>
-                <h2><strong>Ингридиенты:</strong></h2>
+                <table class="table table-responsive">
+                  <tr>
+                    <td>Калорийность: {{ calories }} Ккал</td>
+                    <td>Количество порций: {{ persons_num }}</td>
+                  </tr>
+                </table>
+
+                <h2>Ингредиенты:</h2>
                 <div>
                     <table class="table table-responsive">
-                        {% for ingred, amount in ingredients.items %}
+                        {% for ingredient in ingredients %}
                         <tr>
-                            <th>{{ ingred }}</th>
-                            <th>{{ amount }}</th>
+                            <th>{{ ingredient.ingredient.product_name }}</th>
+                            <th>{{ ingredient.amount }}</th>
+                            <th>{{ ingredient.ingredient.unit }}</th>
                             <th>
                                 <input type="checkbox">
                                 <span class="checkmark"></span>
                             </th>
                         </tr>
                         {% endfor %}
-                        
-                        <!-- <tr>
-                            <th>сосиски</th>
-                            <th>2 шт.</th>
-                            <th>
-                                <input type="checkbox">
-                                <span class="checkmark"></span>
-                            </th>
-                        </tr> -->
-                        <!-- <tr>
-                            <th>масло</th>
-                            <th>2 ст л</th>
-                            <th>
-                                <input type="checkbox">
-                                <span class="checkmark"></span>
-                            </th>
-                        </tr> -->
 
-                        
+
                     </table>
                 </div>
                 <div>
