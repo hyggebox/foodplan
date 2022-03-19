@@ -33,22 +33,23 @@
     <main style="margin-top: calc(2rem + 85px);">
         <section>
             <div class="container">
-                <h1><strong class="foodplan_green">Ваш рецепт:</strong> {{ title }}</h1>
 
-                <div class="row mb-5">
-                    <div class="col-6 col-md-3">
-                        <img src="{{ image }}" alt="" class="w-100">
-                    </div>
-                    <div class="col-6 col-md-3" class="text-secondary mb-3">{{ description }}</div>
+              <div class="justify-content-md-center text-center">
+                <h1 class="my-5"><strong class="foodplan_green">Ваш рецепт:</strong> {{ title }}</h1>
+                <div class="text-center m-4">
+                  <img src="{{ image }}" alt="{{ title }}" class="rounded mx-auto img-fluid">
                 </div>
-                <table class="table table-responsive">
+                <div class="col-8 m-auto lead">{{ description }}</div>
+              </div>
+
+                <table class="table table-responsive mt-5">
                   <tr>
-                    <td>Калорийность: {{ calories }} Ккал</td>
-                    <td>Количество порций: {{ persons_num }}</td>
+                    <td><strong>Калорийность:</strong> {{ calories }} Ккал</td>
+                    <td><strong>Количество порций:</strong> {{ persons_num }}</td>
                   </tr>
                 </table>
 
-                <h2>Ингредиенты:</h2>
+                <h2 class="py-3">Ингредиенты:</h2>
                 <div>
                     <table class="table table-responsive">
                         {% for ingredient in ingredients %}
@@ -56,31 +57,32 @@
                             <th>{{ ingredient.ingredient.product_name }}</th>
                             {% if ingredient.amount %}
                               {% if ingredient.amount|mul:persons_num > 2 %}
-                                <th>{{ ingredient.amount|mul:persons_num|floatformat:'0' }}</th>
+                                <td>{{ ingredient.amount|mul:persons_num|floatformat:'0' }}</td>
                               {% else %}
-                                <th>{{ ingredient.amount|mul:persons_num|floatformat:1 }}</th>
+                                <td>{{ ingredient.amount|mul:persons_num|floatformat:1 }}</td>
                               {% endif %}
                             {% else %}
-                              <th>по вкусу</th>
+                              <td>по вкусу</td>
                             {% endif %}
                             {% if ingredient.ingredient.unit %}
-                              <th>{{ ingredient.ingredient.unit }}</th>
+                              <td>{{ ingredient.ingredient.unit }}</td>
                             {% else %}
-                              <th> </th>
+                              <td> </td>
                             {% endif %}
-                            <th>
+                            <td>
                                 <input type="checkbox">
                                 <span class="checkmark"></span>
-                            </th>
+                            </td>
                         </tr>
                         {% endfor %}
-
-
                     </table>
                 </div>
-                <div>
+
+                <h2 class="pt-5">Приготовление:</h2>
+                <div class="py-4 mb-5">
                     <p>{{ recipe_text }}</p>
                 </div>
+
             </div>
         </section>
     </main>
