@@ -59,6 +59,7 @@ def main():
             )
 
     # Save Recipes
+    Recipe.objects.all().delete()
     for recipe in recipes.items():
         new_recipe = Recipe(
             title=recipe[0],
@@ -72,11 +73,12 @@ def main():
             os.path.basename(recipe[1]['img_url']),
             File(open(response[0], 'rb'))
         )
-        new_recipe.save()
 
         recipe_categories = recipe[1]['categories']
         recipe_ingredients = recipe[1]['ingredients']
         recipe_portions = recipe[1]['portions']
+
+        new_recipe.save()
 
         categories_meals_correlations = [('На завтрак', MEALS[0]),
                                          ('На обед', MEALS[1]),
