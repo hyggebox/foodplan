@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     #'recipes.apps.RecipesConfig'
     'users',
     'recipes',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [
