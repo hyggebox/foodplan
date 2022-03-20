@@ -42,8 +42,8 @@ class Unit(models.Model):
 
 class SubscriptionTimeInterval(models.Model):
     time_intervals = models.PositiveIntegerField(
-        'Период посписки в месяцах')
-    price = models.PositiveIntegerField('цена за подписку', default=1)
+        'Период подписки в месяцах')
+    price = models.PositiveIntegerField('Стоимость подписки', default=1)
 
     class Meta:
         verbose_name = 'Период подписки'
@@ -99,7 +99,7 @@ class Recipe(models.Model):
     restrict_tags = models.ManyToManyField(RestrictTag,
                                            verbose_name='Ограничения в меню',
                                            blank=True)
-    calories = models.PositiveIntegerField(default=1)
+    calories = models.PositiveIntegerField('Калорийность', default=1)
 
     objects = RecipeQuerySet.as_manager()
 
