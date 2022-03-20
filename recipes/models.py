@@ -171,7 +171,7 @@ class Subscription(models.Model):
         verbose_name_plural = 'Подписки'
 
     def __str__(self):
-        return f'Пользователь {self.user} подписка на {self.period}'
+        return f'Пользователь {self.user.first_name} {self.user.last_name} — подписка на {self.period}'
 
     def get_meals(self):
         return ' , '.join([str(meal) for meal in self.meals.all()])
