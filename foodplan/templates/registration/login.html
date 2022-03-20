@@ -1,7 +1,8 @@
 {% load static %}
+{% load widget_tweaks %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -69,15 +70,31 @@
                     {% endif %}
                 </div>
                 <div class="card px-5 py-3 d-flex align-items-center foodplan__shadow">
-
                         <form method="post">
                           {% csrf_token %}
-                          {{ form.as_p }}
-                          <div class="col-12 col-sm-6 mt-3 d-flex justify-content-center align-items-center">
+
+                          {% for field in form %}
+                            <div class="mb-3">
+                              <label class="form-label">{{ field.label }}</label>
+                              {{ field|add_class:"form-control" }}
+                            </div>
+                          {% endfor %}
+
+                          <div class="row mb-3">
+                            <div class="col-12 col-sm-6 mt-3">
+                                <button type="submit" class="btn w-100 btn-outline-success foodplan_green foodplan__border_green">Войти</button>
+                            </div>
+                            <div class="col-12 col-sm-6 mt-3 d-flex justify-content-center align-items-center">
                                 <h6>Нет аккаунта? <a href="{% url 'signup' %}" class="link-dark foodplan_green">Зарегистрируйтесь</a></h6>
                             </div>
-                          <button type="submit"
-                                    class="btn w-100 btn-outline-success foodplan_green foodplan__border_green">Войти</button>
+                          </div>
+
+
+<!--                          <div class="col-12 col-sm-6 mt-3 d-flex justify-content-center align-items-center">-->
+<!--                                <h6>Нет аккаунта? <a href="{% url 'signup' %}" class="link-dark foodplan_green">Зарегистрируйтесь</a></h6>-->
+<!--                            </div>-->
+<!--                          <button type="submit"-->
+<!--                                    class="btn w-100 btn-outline-success foodplan_green foodplan__border_green">Войти</button>-->
                         </form>
 
                     <!--<form method="post" action="{% url 'login' %}>
