@@ -43,6 +43,7 @@ class Unit(models.Model):
 class SubscriptionTimeInterval(models.Model):
     time_intervals = models.PositiveIntegerField(
         'Период посписки в месяцах')
+    price = models.PositiveIntegerField('цена за подписку', default=1)
 
     class Meta:
         verbose_name = 'Период подписки'
