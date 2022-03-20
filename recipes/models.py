@@ -43,13 +43,14 @@ class Unit(models.Model):
 class SubscriptionTimeInterval(models.Model):
     time_intervals = models.PositiveIntegerField(
         'Период посписки в месяцах')
+    price = models.PositiveIntegerField('цена за подписку', default=1)
 
     class Meta:
         verbose_name = 'Период подписки'
         verbose_name_plural = 'Периоды подписки'
 
     def __str__(self):
-        return f'{self.time_intervals} месяцев'
+        return f'{self.time_intervals} мес.'
 
 
 class Ingredient(models.Model):
@@ -69,6 +70,15 @@ class Ingredient(models.Model):
         return self.product_name
 
 
+class RecipeQuerySet(models.QuerySet):
+
+    def meals(self, meals):
+        return self.filter(meals__in=meals).order_by('?')
+
+    def restrictions(self, restrictions):
+        return self.filter(restrict_tags__in=restrictions)
+
+
 class Recipe(models.Model):
     title = models.CharField('Название рецепта', max_length=200)
     image = models.ImageField(
@@ -80,15 +90,18 @@ class Recipe(models.Model):
         blank=True,
         verbose_name='Краткое описание', )
     recipe_text = models.TextField(
-        blank=True,
         verbose_name='Описание приготовления',)
     ingredients = models.ManyToManyField(
         Ingredient,
         through='AmountIngredients',
         verbose_name='Ингредиенты в рецепте',)
     meals = models.ManyToManyField(MealTag, verbose_name='Категории блюд')
-    restrict_tags = models.ManyToManyField(RestrictTag, verbose_name='Ограничения в меню')
+    restrict_tags = models.ManyToManyField(RestrictTag,
+                                           verbose_name='Ограничения в меню',
+                                           blank=True)
     calories = models.PositiveIntegerField(default=1)
+
+    objects = RecipeQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Рецепт'
@@ -119,9 +132,7 @@ class AmountIngredients(models.Model):
         on_delete=models.CASCADE,
         verbose_name='рецепт',
         related_name='ingredient_amount')
-    amount = models.PositiveSmallIntegerField(
-        'Количество',
-        default=1)
+    amount = models.FloatField('Количество', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
@@ -163,14 +174,13 @@ class Subscription(models.Model):
         return f'Пользователь {self.user} подписка на {self.period}'
 
     def get_meals(self):
-        return " , ".join([str(meal) for meal in self.meals.all()])
+        return ' , '.join([str(meal) for meal in self.meals.all()])
 
     def get_restrict_tags(self):
-        return " , ".join([str(meal) for meal in self.restrict_tags.all()])
+        return ' , '.join([str(meal) for meal in self.restrict_tags.all()])
 
+    def get_user_name(self):
+        return f'{self.user.first_name} {self.user.last_name}'
 
-
-
-
-
-
+    def get_user_email(self):
+        return self.user.email

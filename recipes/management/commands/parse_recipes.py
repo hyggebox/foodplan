@@ -5,11 +5,12 @@ from bs4 import BeautifulSoup
 from functools import reduce
 from random import randint
 from urllib.parse import urljoin
+from django.core.management.base import BaseCommand
 
 
 DOMAIN = 'https://povar.ru/'
 ALL_RECIPES_PAGE = '/master/all/'
-NUM_PAGES = 2
+NUM_PAGES = 12
 
 
 def get_recipes_links(category_url):
@@ -49,10 +50,13 @@ def parse_recipe_details(soup, recipe_details):
         ingredient_line = ingredient.text
         ingredient_name = ingredient_line.split('—')[0].strip()
         unsplit_amount = ingredient_line.split('—')[1].strip()
-        if 'По вкусу' in unsplit_amount:
+        try:
+            if 'По вкусу' in unsplit_amount:
+                amount, unit = None, None
+            else:
+                amount, unit = unsplit_amount.split(None, 1)
+        except ValueError:
             amount, unit = None, None
-        else:
-            amount, unit = unsplit_amount.split(None, 1)
 
         clean_unit = None if not unit else fix_unit(unit.lower())
         clean_amount = None if not amount else convert_amount(amount)
@@ -102,7 +106,11 @@ def convert_amount(parsed_qty):
         split_num = parsed_qty.split("-")[0].split("/")
         converted_gty = round(int(split_num[0]) / int(split_num[1]), 2)
     elif "-" in parsed_qty:
-        converted_gty = int(parsed_qty.split("-")[0])
+        split_gty = parsed_qty.split("-")[0]
+        converted_gty = int(split_gty) if not ',' in split_gty else \
+            float(split_gty.replace(",", "."))
+    elif "=" in parsed_qty:
+        converted_gty = int(parsed_qty.split("=")[0])
     elif "/" in parsed_qty:
         split_num = parsed_qty.split("/")
         converted_gty = round(int(split_num[0]) / int(split_num[1]), 2)
@@ -117,13 +125,12 @@ def convert_amount(parsed_qty):
 
 def convert_portions(parsed_portions):
     if parsed_portions.isdigit():
-        converted_portions = int(parsed_portions)
+        return int(parsed_portions)
     elif "-" in parsed_portions:
-        converted_portions = int(parsed_portions.split("-")[0])
-    return converted_portions
+        return int(parsed_portions.split("-")[0])
 
 
-if __name__ == '__main__':
+def main():
     recipe_details = {}
 
     for page in range(1, NUM_PAGES+1):
@@ -138,3 +145,9 @@ if __name__ == '__main__':
 
     with open('recipes.json', 'w', encoding='utf8') as file:
         json.dump(recipe_details, file, ensure_ascii=False, indent=4)
+
+
+class Command(BaseCommand):
+
+    def handle(self, *args, **options):
+        main()
