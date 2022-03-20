@@ -72,8 +72,12 @@ class SubscriptionAdmin(admin.ModelAdmin):
     get_restrict_tags.short_description = 'Ограничения меню'
 
 
+@admin.register(SubscriptionTimeInterval)
+class SubscriptionTimeIntervalAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'price')
+    list_editable = ['price']
+
 
 admin.site.register(RestrictTag)
-admin.site.register(SubscriptionTimeInterval)
 admin.site.register(Unit)
 admin.site.register(MealTag)
