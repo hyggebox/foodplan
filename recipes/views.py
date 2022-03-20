@@ -6,19 +6,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Recipe, User, Subscription
 
 
-def get_recipe_data(recipe):
-    
-    return {
-        "title": recipe.title,
-        "image": recipe.image.url,
-        "description": recipe.description,
-        "recipe_text": recipe.recipe_text,
-        "ingredients": {
-            # ???
-        }
-    }
-
-
 def select_recipe(subscription):
     persons_num = subscription.persons_num
     restrictions = subscription.restrict_tags.all()
@@ -31,29 +18,18 @@ def select_recipe(subscription):
     return subscription_recipe, persons_num
 
 
-def get_users_subscriptions(user_id):
-
-    user = User.objects.get(pk=user_id)
-    return user.subscriptions.all()
-
-
-
 @login_required(login_url='/')
 def render_recipe_page(request, sub_id):
-    print(id)
 
-    # user_id = 1
-    # users_subscriptions = get_users_subscriptions(user_id)
-    # users_recipe, persons_num = select_recipe(users_subscriptions[0])
     try:
         subscription = Subscription.objects.get(pk=sub_id)
     except Subscription.DoesNotExist:
-        return HttpResponse(f'Сорян, подписки с id {sub_id} не найдено')
+        return HttpResponse(f'Подписки с id {sub_id} не найдено')
 
     users_recipe, persons_num = select_recipe(subscription)
 
     if not users_recipe:
-        return HttpResponse('Сорян, по вашим запросам рецептов не найдено')
+        return HttpResponse('По вашим запросам рецептов не найдено')
         # return HttpResponseRedirect('/sorry')
 
 
