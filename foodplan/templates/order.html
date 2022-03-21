@@ -85,7 +85,7 @@
                                 <th scope="row" class="text-start">Завтраки</th>
                                 <td>
                                     <select name="meals" class="form-select">
-                                        <option value="завтрак" selected>&#10004;</option>
+                                        <option value="На завтрак" selected>&#10004;</option>
                                         <option value="">&#10008;</option>
                                     </select>
                                 </td>
@@ -95,7 +95,7 @@
                                 <th scope="row" class="text-start">Обеды</th>
                                 <td>
                                     <select name="meals" class="form-select">
-                                        <option value="обед" selected>&#10004;</option>
+                                        <option value="На обед" selected>&#10004;</option>
                                         <option value="">&#10008;</option>
                                     </select>
                                 </td>
@@ -105,7 +105,7 @@
                                 <th scope="row" class="text-start">Ужины</th>
                                 <td>
                                     <select name="meals" class="form-select">
-                                        <option value="ужин" selected>&#10004;</option>
+                                        <option value="На ужин" selected>&#10004;</option>
                                         <option value="">&#10008;</option>
                                     </select>
                                 </td>
@@ -115,7 +115,7 @@
                                 <th scope="row" class="text-start">Десерты</th>
                                 <td>
                                     <select name="meals" class="form-select">
-                                        <option value="десерт" selected>&#10004;</option>
+                                        <option value="Десерты" selected>&#10004;</option>
                                         <option value="">&#10008;</option>
                                     </select>
                                 </td>
@@ -125,7 +125,7 @@
                                 <th scope="row" class="text-start">Праздничное меню</th>
                                 <td>
                                     <select name="meals" class="form-select">
-                                        <option value="праздничное меню" selected>&#10004;</option>
+                                        <option value="Праздничное меню" selected>&#10004;</option>
                                         <option value="">&#10008;</option>
                                     </select>
                                 </td>
@@ -145,24 +145,33 @@
                             <tr>
                                 <th scope="row" class="text-start">Особенности</th>
                                 <td>
-                                    <div class="form-check d-flex justify-content-start">
-                                        <input class="form-check-input me-1" type="checkbox" value="без глютэна" name="features">
-                                        <label class="form-check-label" for="allergy1">
-                                            без глютэна
-                                        </label>
-                                    </div>
-                                    <div class="form-check d-flex justify-content-start">
-                                        <input class="form-check-input me-1" type="checkbox" value="без сахара" name="features">
-                                        <label class="form-check-label" for="allergy2">
-                                            без сахара
-                                        </label>
-                                    </div>
-                                    <div class="form-check d-flex justify-content-start">
-                                        <input class="form-check-input me-1" type="checkbox" value="вегетарианское" name="features">
-                                        <label class="form-check-label" for="allergy3">
-                                            вегетарианское
-                                        </label>
-                                    </div>
+                                        {% for restriction_tag in restriction_tags %}
+                                          <div class="form-check d-flex justify-content-start">
+                                              <input class="form-check-input me-1" type="checkbox" value="{{ restriction_tag }}" name="features">
+                                              <label class="form-check-label" for="allergy1">
+                                                  {{ restriction_tag }}
+                                              </label>
+                                          </div>
+                                        {% endfor %}
+<!--                                    <div class="form-check d-flex justify-content-start">-->
+<!--                                        <input class="form-check-input me-1" type="checkbox" value="без глютэна" name="features">-->
+<!--                                        <label class="form-check-label" for="allergy1">-->
+<!--                                            -->
+<!--                                        </label>-->
+<!--                                    </div>-->
+<!--                                    <div class="form-check d-flex justify-content-start">-->
+<!--                                        <input class="form-check-input me-1" type="checkbox" value="без сахара" name="features">-->
+<!--                                        <label class="form-check-label" for="allergy2">-->
+<!--                                            без сахара-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+<!--                                    <div class="form-check d-flex justify-content-start">-->
+<!--                                        <input class="form-check-input me-1" type="checkbox" value="вегетарианское" name="features">-->
+<!--                                        <label class="form-check-label" for="allergy3">-->
+<!--                                            вегетарианское-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+
                                 </td>
                             </tr>
                         </tbody>
