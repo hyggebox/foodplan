@@ -35,6 +35,7 @@ def render_lk_page(request):
             'id': user_subsciption.id,
             'title': user_subsciption.__str__(),
             'meals_amount': user_subsciption.meals.count(),
+            'meals': [meal for meal in user_subsciption.meals.all()],
             'persons_amount': user_subsciption.persons_num,
             'features': [tag.tag for tag in user_subsciption.restrict_tags.all()]
         }

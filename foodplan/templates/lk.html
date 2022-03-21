@@ -63,47 +63,62 @@
                             </ul>
 
                             <div class="tab-content mt-2">
-
                                 <div class="tab-pane fade show active" id="menu">
                                     <div class="row">
-                                        <div class="col-2">
+                                        <div class="col-1">
                                             <img src="img/circle1.png" alt="" class="w-100">
                                         </div>
                                         <div class="col-10 col-md-10">
 
                                             {% for subscription in subscriptions %}
+                                          <div class="card my-3 p-2">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <a href="/recipe/{{ subscription.id }}">
-                                                        <h2>Посмотреть рецепт</h2>
+                                                    <a href="/recipe/{{ subscription.id }}" target="_blank" style="color: #91B93E; text-decoration: none;">
+                                                        <h5>Посмотреть рецепт ></h5>
                                                     </a>
                                                 </div>
-                                                <div class="col-md-12 col-lg-9">
-                                                    <h6>
-                                                        {{ subscription.title }}
-                                                        {% for feature in subscription.features %}
-                                                            <br>
-                                                            {{ feature }}
-                                                        {% endfor %} 
-                                                    </h6>
-                                                </div>
-                                                <div class="col-md-12 col-lg-3 text-muted d-flex flex-column justify-content-between">
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Персоны: </small><small>{{ subscription.persons_amount }}</small>
+                                                <div class="col-12">
+                                                    <p>{{ subscription.title }}</p>
+
+                                                    <div class="row">
+                                                      <div class="col-4 justify-content-between">
+                                                          {% if subscription.features %}
+                                                          {% for feature in subscription.features %}
+                                                            {% if forloop.last %}
+                                                              {{ feature }}
+                                                            {% else %}
+                                                              {{ feature }},
+                                                            {% endif %}
+                                                          {% endfor %}
+                                                          {% else %}
+                                                            Классическое меню
+                                                          {% endif %}
+                                                      </div>
+
+                                                       <div class="col-5 justify-content-between">
+                                                          {% for meal in subscription.meals %}
+                                                            {% if forloop.last %}
+                                                              {{ meal }}
+                                                            {% else %}
+                                                              {{ meal }},
+                                                            {% endif %}
+                                                          {% endfor %}
+                                                      </div>
+
+                                                      <div class="col-3 justify-content-between text-muted">
+                                                          Количество порций: {{ subscription.persons_amount }}
+                                                      </div>
+
                                                     </div>
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Кол-во приёмов пищи: </small><small>{{ subscription.meals_amount }}</small>
-                                                    </div>
-                                                    
                                                 </div>
                                             </div>
+                                            </div>
                                             {% endfor %} 
-                                            
-                                            <a href="/order">
-                                                <div class="row">
-                                                    <h1>New subscribe!</h1>
-                                                </div>
-                                            </a>
+
+                                          <div class="my-4">
+                                            <a href="/order" class="btn btn-outline-success foodplan_green foodplan__border_green">Оформить новую подписку</a>
+                                          </div>
                                         </div>
                                     </div>
                                 </div>
