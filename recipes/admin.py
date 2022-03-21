@@ -47,7 +47,7 @@ class AmountAdmin(admin.ModelAdmin):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('get_user_name', 'get_user_email', 'period', 'persons_num',
+    list_display = ('user', 'get_user_name', 'get_user_email', 'period', 'persons_num',
                     'get_meals', 'get_restrict_tags')
     list_editable = ['period', 'persons_num']
 
