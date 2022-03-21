@@ -13,8 +13,6 @@
     >
     <link rel="stylesheet" href="{% static 'foodplan/style.css' %}"/>
     <title>Foodplan 2021 - Меню на неделю FOODPLAN</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script>
 </head>
 
 <body>
@@ -58,7 +56,7 @@
                 </div>
                 <h2><strong>Выберите подходящий тариф</strong></h2>
             
-                <form id='subsform'  method="POST">
+                <form  method="POST">
                     {% csrf_token %}
                     <table class="table text-center text-truncate mb-5">
                         <tbody>
@@ -73,9 +71,6 @@
                                         function getSubsPeriod(select) {
                                             const option = select.querySelector(`option[value="${select.value}"]`)
                                             document.getElementById('showSum').innerHTML = option.value * 100
-                                            // const pay_sum = document.getElementById('showSum').innerHTML
-                                            // console.log(pay_sum)
-            
                                         } 
                                     </script>
                                 </td>
@@ -168,18 +163,17 @@
                         </tbody>
                     </table>
 
-                    
+                    <div class="d-flex justify-content-center my-5">
+                        <button
+                            id="btnContinue"
+                            type="submit"
+                            value="Send"
+                            class="btn btn-outline-success foodplan_green foodplan__border_green w-50"
+                        >
+                        Добавить подписку
+                        </button>
+                    </div>
                 </form>
-                <div class="d-flex justify-content-center my-5">
-                    <button
-                        id="btnContinue"
-                        
-                        class="btn btn-outline-success foodplan_green foodplan__border_green w-50"
-                    >
-                    Добавить подписку
-                    </button>
-                </div>
-                
 
                 <!-- <form class="card d-flex flex-row align-items-baseline mb-5 p-3 foodplan__bg_grey">
                     <label for="exampleInputPassword1" class="form-label me-2">Промокод</label>
@@ -208,48 +202,9 @@
             document.getElementById('showSum').innerHTML = initial_period * 100
         }
     </script>
-
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"
     ></script>
-
-    <script>
-        this.pay = function () {
-            var pay_sum = Number(document.getElementById('showSum').innerHTML)
-
-            var widget = new cp.CloudPayments();
-            
-            widget.pay('auth', // или 'charge'
-                { //options
-                    publicId: 'test_api_00000000000000000000001', //id из личного кабинета
-                    description: 'Оплата товаров в example.com', //назначение
-                    // amount: document.getElementById('showSum').innerHTML, //сумма
-                    amount: pay_sum, //сумма
-                    currency: 'RUB', //валюта
-                    accountId: 'user@example.com', //идентификатор плательщика (необязательно)
-                    invoiceId: '1234567', //номер заказа  (необязательно)
-                    email: 'user@example.com', //email плательщика (необязательно)
-                    skin: "mini",
-                    data: {
-                        myProp: 'myProp value'
-                    }
-                },
-                {
-                    onSuccess: function (options) { // success
-                        $('#subsform').submit()
-                    },
-                    onFail: function (reason, options) { // fail
-                        //действие при неуспешной оплате
-                    },
-                    onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
-                        //например вызов вашей аналитики Facebook Pixel
-                    }
-                }
-            )
-        };
-
-        $('#btnContinue').click(pay);
-    </script>
 </body>
