@@ -23,7 +23,7 @@ def render_auth_page(request):
     return render(request, 'auth.html')
 
 
-@login_required(login_url='/')
+@login_required(login_url='/auth/login/')
 def render_lk_page(request):
     current_user = User.objects.get(id=request.user.id)
     user_subscriptions = current_user.subscriptions.all()
