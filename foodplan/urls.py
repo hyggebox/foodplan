@@ -9,13 +9,14 @@ from .views import render_reg_page
 from .views import render_auth_page
 from .views import render_lk_page
 from .views import render_order_page
-
+from .views import render_order_test_pay
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('', render_start_page, name='render_start_page'),
     path('order_test', render_order_page_test, name='render_order_page_test'),
+    path('order_test_pay', render_order_test_pay, name='render_order_test_pay'),
     path('auth/', include('django.contrib.auth.urls')),
     path('lk', render_lk_page, name='render_lk_page'),
     path('order', render_order_page, name='render_order_page'),
