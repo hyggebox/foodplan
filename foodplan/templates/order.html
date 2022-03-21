@@ -37,7 +37,7 @@
         <section>
             <div class="container">
                 <h1><strong class="foodplan_green">1 шаг </strong>до первого меню</h1>
-                <h5 class="text-secondary mb-3">Вам будет доступно 4 типа меню: Классическое, Низкоуглеводное, Вегетарианское и Кето.</h5>
+                <h5 class="text-secondary mb-3">Вам будет доступно {{ restriction_tags|length|add:1 }} типа меню: Классическое меню, {{ restriction_tags|join:", " }}.</h5>
                 <div class="row mb-5">
                     <div class="col-6 col-md-3">
                         <!-- <img src="img/menu_classical.png" alt="" class="w-100"> -->
@@ -158,25 +158,6 @@
                                               </label>
                                           </div>
                                         {% endfor %}
-<!--                                    <div class="form-check d-flex justify-content-start">-->
-<!--                                        <input class="form-check-input me-1" type="checkbox" value="без глютэна" name="features">-->
-<!--                                        <label class="form-check-label" for="allergy1">-->
-<!--                                            -->
-<!--                                        </label>-->
-<!--                                    </div>-->
-<!--                                    <div class="form-check d-flex justify-content-start">-->
-<!--                                        <input class="form-check-input me-1" type="checkbox" value="без сахара" name="features">-->
-<!--                                        <label class="form-check-label" for="allergy2">-->
-<!--                                            без сахара-->
-<!--                                        </label>-->
-<!--                                    </div>-->
-<!--                                    <div class="form-check d-flex justify-content-start">-->
-<!--                                        <input class="form-check-input me-1" type="checkbox" value="вегетарианское" name="features">-->
-<!--                                        <label class="form-check-label" for="allergy3">-->
-<!--                                            вегетарианское-->
-<!--                                        </label>-->
-<!--                                    </div>-->
-
                                 </td>
                             </tr>
                         </tbody>
