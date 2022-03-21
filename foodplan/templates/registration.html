@@ -89,18 +89,38 @@
                         <div class="mb-3">
                             <label for="id_username" class="form-label">Username</label>
                             <input type="text" name="username" class="form-control" id="name">
+
+                            {% if form.username.errors %}
+                            <span class="form__error">{{ form.username.errors }}</span>
+                            {% endif %}
+
                         </div>
                         <div class="mb-3">
                             <label for="id_email" class="form-label">Email</label>
                             <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+
+                            {% if form.email.errors %}
+                            <span class="form__error">{{ form.email.errors }}</span>
+                            {% endif %}
+
                         </div>
                         <div class="mb-3">
                             <label for="id_password1" class="form-label">Пароль</label>
                             <input type="password" name="password1" class="form-control" id="password1">
+
+                            {% if form.password1.errors %}
+                            <span class="form__error">{{ form.password1.errors }}</span>
+                            {% endif %}
+
                         </div>
                         <div class="mb-3">
                             <label for="id_password2" class="form-label">Подтверждение пароля</label>
                             <input type="password" name="password2" class="form-control" id="password2">
+
+                            {% if form.password2.errors %}
+                            <span class="form__error">{{ form.password2.errors }}</span>
+                            {% endif %}
+
                         </div>
                         <div class="row mb-3">
                             <div class="col-12 col-sm-6 mt-3">
