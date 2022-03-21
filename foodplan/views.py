@@ -12,6 +12,8 @@ from .forms import SubsForm
 
 
 def render_start_page(request):
+    if request.user.is_authenticated:
+        return redirect('/lk')
     return render(request, 'index.html')
 
 
