@@ -45,7 +45,9 @@
                         </div>
                         <h3 class="card-title text-center">{{user.username }}</h3>
                         <div class="d-block">
-                            <button class="btn btn-outline-success foodplan_green foodplan__border_green">Выйти</button>
+                            <a href="{% url 'logout' %}" class="btn btn-outline-success foodplan_green foodplan__border_green">
+                              Выйти
+                            </a>
                         </div>
                     </div>
 
