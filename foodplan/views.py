@@ -92,13 +92,13 @@ def render_order_page(request):
     else:
         subsform = SubsForm()
 
-
         restriction_tags = RestrictTag.objects.all()
-        print(restriction_tags)
+        subscription_periods = SubscriptionTimeInterval.objects.all()
 
         context = {
             'form': subsform,
-            'restriction_tags': restriction_tags
+            'restriction_tags': restriction_tags,
+            'subscription_periods': subscription_periods
         }
 
         return render(request, 'order.html', context)

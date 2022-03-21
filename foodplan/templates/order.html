@@ -66,8 +66,13 @@
                                 <th class="text-start" scope="row" >Срок подписки</th>
                                 <td>
                                     <select onchange='getSubsPeriod(this)' name='subs_period' class="form-select">
-                                        <option id='initialPeriod' value="3" selected>3 месяца</option>
-                                        <option value="12">12 месяцев</option>
+                                      {% for period in subscription_periods %}
+                                        {% if forloop.first %}
+                                          <option id='initialPeriod' value="{{ period.time_intervals }}" selected>{{ period }}</option>
+                                        {% else %}
+                                          <option value="{{ period.time_intervals }}">{{ period }}</option>
+                                        {% endif %}
+                                      {% endfor %}
                                     </select>
                                     <script>
                                         function getSubsPeriod(select) {
